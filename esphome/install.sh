@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/data/data/com.termux/files/usr/bin/bash
 termux-change-repo
 pkg update && pkg upgrade -y
 pkg install -y python rust git glibc-repo file
