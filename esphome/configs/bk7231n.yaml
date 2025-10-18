@@ -1,0 +1,5 @@
+esphome:
+  name: bk7231n
+
+bk72xx:
+  board: cb2s
