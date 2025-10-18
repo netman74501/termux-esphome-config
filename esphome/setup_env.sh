@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/data/data/com.termux/files/usr/bin/bash
 RED="\e[31m"
 GREEN="\e[32m"
 YELOW="\e[33m"
