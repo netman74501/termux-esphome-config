@@ -12,7 +12,7 @@ exec_grun() {
       echo -e "${RED}Configurarion failed.${RESET}"
       return 1
     fi
-    echo -e "${GREEN}Configuration succeded.${RESET}"
+    echo -e "${GREEN}Configuration succeeded.${RESET}"
     return 0
   fi
   echo -e "${YELOW}Not an executable.${RESET}"
