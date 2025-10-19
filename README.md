@@ -12,7 +12,7 @@ You can read through the scripts to get an idea of what they do, but below are d
 ## General usage
   - Install [Termux](https://github.com/termux/termux-app) on an Android device (e.g. Samsung Galaxy S23)
   - Open Termux
-  - Issue `source <(curl -fsSL https://raw.githubusercontent.com/netman74501/termux-esphome-config/refs/heads/main/install.sh` at the Termux prompt to install dependencies and setup the toolchain environment.
+  - Issue `source <(curl -fsSL https://raw.githubusercontent.com/netman74501/termux-esphome-config/refs/heads/main/install.sh)` at the Termux prompt to install dependencies and setup the toolchain environment.
   - If everything went well, you will be in ESPHome's virtual environment when the install script has finshed. At this point the virtual environment has been installed and you can use normal ESPHome commands such as `esphome compile light_switch.yaml`.
   - Add your specific ESPHome yaml configuration files to `~/.esphome/configs`. **Please note that I have only tested and used the esp8266 and bk7231n platforms. Any others may require editing of the setup script, described above.**
   - You will need to run `source ~/setup_env.sh` each time you open Termux or exit the virtual environment before you can successfully compile for ESPHome. You may need to re-run the script if there are any extra dependencies that are installed through PlatformIO due to adding new sections\features to your configuration files.
