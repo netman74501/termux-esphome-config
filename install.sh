@@ -76,7 +76,6 @@ esp8266:
   framework:
     version: recommended
 EOF
-chmod +x ${HOME}/setup_env.sh
 }
 termux-change-repo
 pkg update && pkg upgrade -y
@@ -94,4 +93,5 @@ esphome -v compile esp8266.yaml
 esphome -v compile bk7231n.yaml
 cd ${HOME}
 create_setup_env
+chmod +x ${HOME}/setup_env.sh
 source ${HOME}/setup_env.sh
