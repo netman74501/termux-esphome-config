@@ -25,7 +25,7 @@ exec_grun() {
   echo -e "${YELOW}Not an executable.${RESET}"
   return 1
 }
-if [ "$1" != "-nc ] && [ "$1" != "--no-configure" ]; then
+if [ "$1" != "-nc" ] && [ "$1" != "--no-configure" ]; then
   # Speed up finding libraries by changing directories first
   cd ${HOME}/.platformio/packages/toolchain-xtensa/libexec
   for FILE in ${HOME}/.platformio/packages/toolchain-xtensa/bin/*
