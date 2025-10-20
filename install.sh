@@ -25,36 +25,38 @@ exec_grun() {
   echo -e "${YELOW}Not an executable.${RESET}"
   return 1
 }
+if [ "$1" != "-nc ] && [ "$1" != "--no-configure" ]; then
+  # Speed up finding libraries by changing directories first
+  cd ${HOME}/.platformio/packages/toolchain-xtensa/libexec
+  for FILE in ${HOME}/.platformio/packages/toolchain-xtensa/bin/*
+  do
+    exec_grun "${FILE}"
+  done
+  for FILE in ${HOME}/.platformio/packages/toolchain-xtensa/xtensa-lx106-elf/bin/*
+  do
+    exec_grun "${FILE}"
+  done
+  for FILE in ${HOME}/.platformio/packages/toolchain-xtensa/libexec/gcc/xtensa-lx106-elf/10.3.0/*
+  do
+    exec_grun "${FILE}"
+  done
+  # Speed up finding libraries by changing directories first
+  cd ${HOME}/.platformio/packages/toolchain-gccarmnoneeabi/libexec
+  for FILE in ${HOME}/.platformio/packages/toolchain-gccarmnoneeabi/bin/*
+  do
+    exec_grun "${FILE}"
+  done
+  for FILE in ${HOME}/.platformio/packages/toolchain-gccarmnoneeabi/arm-none-eabi/bin/*
+  do
+    exec_grun "${FILE}"
+  done
+  for FILE in ${HOME}/.platformio/packages/toolchain-gccarmnoneeabi/libexec/gcc/arm-none-eabi/10.3.1/*
+  do
+    exec_grun "${FILE}"
+  done
+fi
 source ${ENV_DIR}/bin/activate
 unset LD_PRELOAD
-# Speed up finding libraries by changing directories first
-cd ${HOME}/.platformio/packages/toolchain-xtensa/libexec
-for FILE in ${HOME}/.platformio/packages/toolchain-xtensa/bin/*
-do
-  exec_grun "${FILE}"
-done
-for FILE in ${HOME}/.platformio/packages/toolchain-xtensa/xtensa-lx106-elf/bin/*
-do
-  exec_grun "${FILE}"
-done
-for FILE in ${HOME}/.platformio/packages/toolchain-xtensa/libexec/gcc/xtensa-lx106-elf/10.3.0/*
-do
-  exec_grun "${FILE}"
-done
-# Speed up finding libraries by changing directories first
-cd ${HOME}/.platformio/packages/toolchain-gccarmnoneeabi/libexec
-for FILE in ${HOME}/.platformio/packages/toolchain-gccarmnoneeabi/bin/*
-do
-  exec_grun "${FILE}"
-done
-for FILE in ${HOME}/.platformio/packages/toolchain-gccarmnoneeabi/arm-none-eabi/bin/*
-do
-  exec_grun "${FILE}"
-done
-for FILE in ${HOME}/.platformio/packages/toolchain-gccarmnoneeabi/libexec/gcc/arm-none-eabi/10.3.1/*
-do
-  exec_grun "${FILE}"
-done
 mkdir -p ${ENV_DIR}/configs
 cd ${ENV_DIR}/configs
 EOF
