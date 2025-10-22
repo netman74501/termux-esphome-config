@@ -6,6 +6,7 @@ cat << EOF > ${HOME}/setup_env.sh
 ENV_DIR=${ENV_DIR}
 EOF
 cat << "EOF" >> ${HOME}/setup_env.sh
+TC_DIR=("${HOME}"/.platformio/packages/toolchain*)
 RED="\e[31m"
 GREEN="\e[32m"
 YELOW="\e[33m"
@@ -14,8 +15,8 @@ RESET="\e[0m"
 exec_grun() {
   echo -e "Processing ${CYAN}${FILE}${RESET}"
   if [ -e "${FILE}" ] && file -bL --mime "${FILE}" | grep -q "executable; charset=binary"; then
-    OUTPUT=$(grun -f -c "$@" 2>&1)
-    if echo "$OUTPUT" | grep -q -i -E "patchelf|error"; then
+    OUTPUT=$(grun -f -c "${FILE}" 2>&1) # Execute grun and store output
+    if echo "$OUTPUT" | grep -q -i -E "patchelf|error"; then # Check output for failures
       echo -e "${RED}Configuration failed.${RESET}"
       return 1
     fi
@@ -26,39 +27,29 @@ exec_grun() {
   return 1
 }
 if [ "$1" != "-nc" ] && [ "$1" != "--no-configure" ]; then
-  # Speed up finding libraries by changing directories first
-  cd ${HOME}/.platformio/packages/toolchain-xtensa/libexec
-  for FILE in ${HOME}/.platformio/packages/toolchain-xtensa/bin/*
-  do
-    exec_grun "${FILE}"
-  done
-  for FILE in ${HOME}/.platformio/packages/toolchain-xtensa/xtensa-lx106-elf/bin/*
-  do
-    exec_grun "${FILE}"
-  done
-  for FILE in ${HOME}/.platformio/packages/toolchain-xtensa/libexec/gcc/xtensa-lx106-elf/10.3.0/*
-  do
-    exec_grun "${FILE}"
-  done
-  # Speed up finding libraries by changing directories first
-  cd ${HOME}/.platformio/packages/toolchain-gccarmnoneeabi/libexec
-  for FILE in ${HOME}/.platformio/packages/toolchain-gccarmnoneeabi/bin/*
-  do
-    exec_grun "${FILE}"
-  done
-  for FILE in ${HOME}/.platformio/packages/toolchain-gccarmnoneeabi/arm-none-eabi/bin/*
-  do
-    exec_grun "${FILE}"
-  done
-  for FILE in ${HOME}/.platformio/packages/toolchain-gccarmnoneeabi/libexec/gcc/arm-none-eabi/10.3.1/*
-  do
-    exec_grun "${FILE}"
-  done
+  if shopt -s nullglob; then # Return empty array if no match
+    if [ ${#TC_DIR[@]} -gt 0 ]; then # Check for toolchain(s)
+      for TC in "${TC_DIR[@]}"; do
+        # Speed up finding libraries by changing directory to libexec if it exists
+        if [ -d "${TC}"/libexec ]; then
+          cd "${TC}"/libexec
+          PWD=$(pwd)
+          echo "Changed directory to ${PWD}"
+        fi
+        # Locate directory paths using names of unique binaries
+        for DIR in $(find "${TC}" \( -name "readelf" -or -name "*g++" -or -name "cc1" \) -printf '%h\n' 2>/dev/null); do
+          for FILE in "${DIR}"/*; do
+            exec_grun
+          done
+        done
+      done
+    fi
+  fi
 fi
-source ${ENV_DIR}/bin/activate
+source "${ENV_DIR}"/bin/activate
 unset LD_PRELOAD
-mkdir -p ${ENV_DIR}/configs
-cd ${ENV_DIR}/configs
+mkdir -p "${ENV_DIR}"/configs
+cd "${ENV_DIR}"/configs
 EOF
 }
 create_tmp_configs(){
